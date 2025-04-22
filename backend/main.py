@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 import shutil
@@ -19,8 +20,12 @@ from sqlalchemy.orm import joinedload
 
 app = FastAPI()
 
+# Mount built frontend as static files
+frontend_dist = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
 
-@app.get("/")
+
+@app.get("/hello")
 async def root():
     return {"message": "Hello voice ai"}
 
